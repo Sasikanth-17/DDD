@@ -108,22 +108,67 @@ from langchain_community.tools import DuckDuckGoSearchRun
 search = DuckDuckGoSearchRun()
 
 # Streamlit app
-st.title("Search AI Companies in Hyderabad")
+st.title("Multi-Agent Architectue")
 
 # Input field for search query
-query = st.text_input("Enter your search query:", "AI Planet Company in Hyderabad")
+query = st.text_input("Enter your search query:")
 
 # Button to trigger the search
-if st.button("Search"):
-    with st.spinner("Searching..."):
-        try:
-            # Invoke the search
+# if st.button("Search"):
+#     with st.spinner("Searching..."):
+#         try:
+#             # Invoke the search
+#             results = search.invoke(query)
+#             # Display results
+#             st.subheader("Search Results:")
+#             st.write(results)
+#         except Exception as e:
+#             st.error(f"An error occurred: {e}")
+
+import streamlit as st
+from langchain_community.tools import DuckDuckGoSearchRun
+import time
+
+# Initialize DuckDuckGoSearchRun
+search = DuckDuckGoSearchRun()
+
+# Function to handle the search query and return results
+def get_search_results(query: str):
+    try:
+        with st.spinner("Searching..."):
+            # Invoke the search tool
             results = search.invoke(query)
-            # Display results
+            return results
+    except Exception as e:
+        # Handle any errors that occur during the search process
+        st.error(f"An error occurred: {e}")
+        return None
+
+# Streamlit app layout
+st.set_page_config(page_title="Multi-Agent Architecture", layout="wide")
+st.title("Multi-Agent Architecture")
+
+# Input field for search query
+query = st.text_input("Enter your search query:")
+
+# Search button logic
+if query:
+    if st.button("Search"):
+        results = get_search_results(query)
+        
+        # Display the search results if available
+        if results:
             st.subheader("Search Results:")
             st.write(results)
-        except Exception as e:
-            st.error(f"An error occurred: {e}")
+        else:
+            st.warning("No results found, or an error occurred.")
+else:
+    st.info("Please enter a search query to get started.")
 
-# Footer
-st.caption("Powered by DuckDuckGo and LangChain Community Tools")
+# Optional: Add a footer or more interactivity (like pagination, etc.)
+st.markdown("### About this App")
+st.write("""
+    This app leverages DuckDuckGo's search engine to fetch search results based on your query.
+    You can explore how Generative AI can enhance search functionalities.
+""")
+
